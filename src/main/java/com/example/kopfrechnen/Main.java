@@ -18,10 +18,10 @@ import javafx.stage.Stage;
  * Kopfrechner.
  * Main 125 lines.
  * Task 68 lines.
- * TaskSet 31 lines.
+ * TaskSet 26 lines.
  * Configuration 15 lines.
  * StartWindow 70 lines.
- * 309 lines.
+ * 304 lines.
  * + 79 lines CSS.
  */
 
@@ -57,7 +57,7 @@ public class Main extends Application {
     field.setOnKeyPressed(e -> {
       if (e.getCode() == KeyCode.ENTER) {
         handleUserAnswer(field, content, task);
-        if (taskSet.containsNextTask()) {
+        if (!taskSet.isEmpty()) {
           field.clear();
           playGame(taskLabel, field, content, st);
         } else {

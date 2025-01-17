@@ -1,31 +1,26 @@
 package com.example.kopfrechnen;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.ArrayDeque;
 
 public class TaskSet {
 
-  private final List<Task> taskList;
-  private int index = 0;
+  private final ArrayDeque<Task> tasks;
 
   public TaskSet(Configuration configuration) {
     if (configuration == null) {
       throw new NullPointerException("configuration cannot be null reference");
     }
-    this.taskList = new ArrayList<>();
+    this.tasks = new ArrayDeque<>();
     for (int i = 0; i < configuration.numberOfTask(); i++) {
-      taskList.add(new Task(configuration.limit(), configuration.operator()));
+      tasks.addFirst(new Task(configuration.limit(), configuration.operator()));
     }
   }
 
   public Task getnextTask() {
-    Task task = taskList.get(index);
-    if (containsNextTask()) {
-      index++;
-    }
-    return task;
+    return tasks.pollFirst();
   }
-  public boolean containsNextTask() {
-    return index < taskList.size();
+
+  public boolean isEmpty() {
+    return tasks.isEmpty();
   }
 }

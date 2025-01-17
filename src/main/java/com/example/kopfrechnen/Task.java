@@ -4,7 +4,7 @@ import java.util.Objects;
 import java.util.Random;
 
 /**
- * Task Objekt which consists of a random number n1 and n2 with an operator between them.
+ * Task Objekt which consists of random numbers n1 and n2 with an operator between them.
  * <p> </p>
  */
 
@@ -29,10 +29,10 @@ public class Task {
   }
 
   private int calculateAnswer() {
+    Random random = new Random();
     if (Objects.equals(operator, "/")) {
       int resultForDivision;
       while (true) {
-        Random random = new Random();
         int n1 = random.nextInt(limit);
         int n2 = random.nextInt(limit);
         if (n2 != 0 && n1 % n2 == 0) {
@@ -44,16 +44,16 @@ public class Task {
       }
       return resultForDivision;
     }
-    Random random = new Random();
     int n1 = random.nextInt(limit);
     int n2 = random.nextInt(limit);
-    int result = 0;
+    int result;
     this.n1 = n1;
     this.n2 = n2;
     switch (operator) {
       case "+" -> result = n1 + n2;
       case "-" -> result = n1 - n2;
       case "*" -> result = n1 * n2;
+      default -> result = 0;
     }
     return result;
   }
