@@ -1,10 +1,18 @@
-package com.example.kopfrechnen;
+package com.example.kopfrechnen.model;
 
 import java.util.ArrayDeque;
+
+/**
+ * Contains Tasks that are pulled out every time after the user enters the answer.
+ */
 
 public class TaskSet {
 
   private final ArrayDeque<Task> tasks;
+
+  /**
+   * Adds Tasks in the Queue that are specified using the configuration that the user sets.
+   */
 
   public TaskSet(Configuration configuration) {
     if (configuration == null) {
@@ -18,9 +26,5 @@ public class TaskSet {
 
   public Task getnextTask() {
     return tasks.pollFirst();
-  }
-
-  public boolean isEmpty() {
-    return tasks.isEmpty();
   }
 }

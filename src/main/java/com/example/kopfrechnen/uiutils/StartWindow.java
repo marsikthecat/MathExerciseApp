@@ -1,5 +1,6 @@
-package com.example.kopfrechnen;
+package com.example.kopfrechnen.uiutils;
 
+import com.example.kopfrechnen.model.Configuration;
 import java.util.Objects;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -11,8 +12,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 /**
- * Start window Object.
- * <p> </p>
+ * Start window Object which asks the user for the configuration.
  */
 
 public class StartWindow extends Stage {
@@ -25,7 +25,7 @@ public class StartWindow extends Stage {
 
   public StartWindow() {
     Scene scene = getContent();
-    this.setTitle("Hey");
+    this.setTitle("Hey bro");
     this.setResizable(false);
     this.setScene(scene);
     this.showAndWait();
@@ -37,14 +37,14 @@ public class StartWindow extends Stage {
     operator.setValue("+");
     Spinner<Integer> limit = new Spinner<>(1, 100, 1);
     Spinner<Integer> numTask = new Spinner<>(1, 30, 1);
-    Button btn = new Button("Starten");
+    Button btn = new Button("Start the Game");
     btn.setOnAction(e -> startMain(operator, limit, numTask));
-    Button stop = new Button("Spiel beenden");
+    Button stop = new Button("Stop the Game");
     stop.setOnAction(e -> System.exit(0));
     VBox content = new VBox(10);
     content.setAlignment(Pos.CENTER);
-    content.getChildren().addAll(new Label("Operator"), operator, new Label("Limit: "), limit,
-            new Label("Anzahl Aufgaben"), numTask, btn, stop);
+    content.getChildren().addAll(new Label("Choose operator: "), operator,
+            new Label("Limit: "), limit, new Label("Number of tasks: "), numTask, btn, stop);
     Scene scene = new Scene(content, 200, 300);
     scene.getStylesheets().add(Objects.requireNonNull(
             getClass().getResource("/styles.css")).toExternalForm());
@@ -55,7 +55,6 @@ public class StartWindow extends Stage {
     operator.getStyleClass().add("combo-box");
     return scene;
   }
-
 
   private void startMain(ComboBox<String> operator, Spinner<Integer> limit, 
       Spinner<Integer> numberOfTask) {

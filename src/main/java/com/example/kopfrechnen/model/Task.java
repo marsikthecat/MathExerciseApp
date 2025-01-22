@@ -1,4 +1,4 @@
-package com.example.kopfrechnen;
+package com.example.kopfrechnen.model;
 
 import java.util.Objects;
 import java.util.Random;

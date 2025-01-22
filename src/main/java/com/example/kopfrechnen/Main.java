@@ -1,6 +1,10 @@
 package com.example.kopfrechnen;
 
 import java.util.Optional;
+import com.example.kopfrechnen.model.Configuration;
+import com.example.kopfrechnen.model.TaskSet;
+import com.example.kopfrechnen.uiutils.StartWindow;
+import com.example.kopfrechnen.viewmodel.ViewModel;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -14,20 +18,17 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 /**
- * <p> </p>
- * Kopfrechner.
- * Main 125 lines.
- * Task 68 lines.
- * TaskSet 26 lines.
- * Configuration 15 lines.
- * StartWindow 70 lines.
- * 304 lines.
- * + 79 lines CSS.
+ * Main 109 lines.
+ * ViewModel 81 lines.
+ * TaskSet 30 lines.
+ * Configuration 13 lines.
+ * StartWindow 69 lines.
+ * 302 lines + 79 lines CSS.
  */
 
 public class Main extends Application {
 
-  private int right = 0;
+  private ViewModel viewModel;
   private Configuration configuration;
   private TaskSet taskSet;
 
@@ -35,39 +36,37 @@ public class Main extends Application {
   public void start(Stage stage) {
     StartWindow startWindow = new StartWindow();
     configuration = startWindow.getConfig();
-    this.taskSet = new TaskSet(configuration);
+    taskSet = new TaskSet(configuration);
+    viewModel = new ViewModel(taskSet);
+
     VBox content = new VBox();
     Label taskLabel = new Label();
+    taskLabel.textProperty().bind(viewModel.getCurrentTaskString());
     taskLabel.setFont(new Font("Arial", 25));
+
     TextField field = new TextField();
     field.setFont(new Font("Arial", 24));
-    long st = System.currentTimeMillis();
-    playGame(taskLabel, field, content, st);
+    field.textProperty().bindBidirectional(viewModel.getUserInputProperty());
+
     content.getChildren().addAll(taskLabel, field);
     content.setAlignment(Pos.CENTER);
+    content.styleProperty().bind(viewModel.getColorProperty());
+
+    long startTime = System.currentTimeMillis();
+    setUpGame(field, startTime);
+
     Scene scene = new Scene(content, 320, 240);
-    stage.setTitle("Kopfrechnen");
+    stage.setTitle("MathQuiz");
     stage.setScene(scene);
     stage.show();
   }
 
-  private void playGame(Label taskLabel, TextField field, VBox content, long st) {
-    Task task = taskSet.getnextTask();
-    taskLabel.setText(task.showTask());
+  public void setUpGame(TextField field, long startTime) {
     field.setOnKeyPressed(e -> {
       if (e.getCode() == KeyCode.ENTER) {
-        handleUserAnswer(field, content, task);
-        if (!taskSet.isEmpty()) {
-          field.clear();
-          playGame(taskLabel, field, content, st);
-        } else {
-          boolean continueGame = endGame(field, right, st);
-          if (continueGame) {
-            resetGame(field);
-            playGame(taskLabel, field, content, System.currentTimeMillis());
-          } else {
-            System.exit(0);
-          }
+        viewModel.checkAnswer();
+        if (viewModel.getGameFinishedProperty().get()) {
+          endGame(field, viewModel.getCorrectAnswersProperty().get(), startTime);
         }
       }
     });
@@ -81,41 +80,26 @@ public class Main extends Application {
     }
     field.setDisable(false);
     this.taskSet = new TaskSet(configuration);
-    this.right = 0;
+    this.viewModel = new ViewModel(taskSet);
   }
 
-  private void handleUserAnswer(TextField field, VBox content, Task task) {
-    if (check(field.getText()) || Integer.parseInt(field.getText())
-            == task.getAnswer()) {
-      content.setStyle("-fx-background-color: green");
-      right++;
-    } else {
-      content.setStyle("-fx-background-color: red");
-    }
-  }
-
-  private boolean endGame(TextField field, int right, long st) {
+  private void endGame(TextField field, int right, long st) {
     field.setDisable(true);
     Alert alert = new Alert(Alert.AlertType.INFORMATION);
-    alert.setTitle("Ergebnis");
+    alert.setTitle("Result");
     long et = System.currentTimeMillis();
-    String headerMessage = "Ergebnis: " + right + " von " + configuration.numberOfTask()
-            + " richtig \n" + "Zeit: " + (et - st) / 1000.0  + " Sekunden";
+    String headerMessage = "You got " + right + " of " + configuration.numberOfTask()
+            + " correct \n" + "needed time: " + (et - st) / 1000.0  + " seconds";
     alert.setHeaderText(headerMessage);
-    alert.setContentText("Neustart?");
-    ButtonType yes = new ButtonType("Ja");
-    ButtonType no = new ButtonType("Nein");
+    alert.setContentText("restart?");
+    ButtonType yes = new ButtonType("Yes");
+    ButtonType no = new ButtonType("Nope");
     alert.getButtonTypes().setAll(yes, no);
     Optional<ButtonType> result = alert.showAndWait();
-    return result.isPresent() && result.get() == yes;
-  }
-
-  boolean check(String txt) {
-    try {
-      Integer.parseInt(txt);
-      return true;
-    } catch (NumberFormatException e) {
-      return false;
+    if (result.isPresent() && result.get() == yes) {
+      resetGame(field);
+    } else {
+      System.exit(0);
     }
   }
 
