@@ -5,7 +5,6 @@ import java.util.Random;
 
 /**
  * Task Objekt which consists of random numbers n1 and n2 with an operator between them.
- * <p> </p>
  */
 
 public class Task {
@@ -16,12 +15,9 @@ public class Task {
   private final String operator;
   private final int answer;
 
-  /** Constructor for the task.
-   *
-   *  @param limit the limit of the generated two numbers.
-   *  @param operator the operator between the two numbers.
+  /**
+   * Constructor for the task.
    */
-
   public Task(int limit, String operator) {
     this.limit = limit;
     this.operator = operator;
@@ -62,6 +58,9 @@ public class Task {
     return answer;
   }
 
+  /**
+   * Returns the task as a string.
+   */
   public String showTask() {
     return n1 + " " + operator + " " + n2;
   }

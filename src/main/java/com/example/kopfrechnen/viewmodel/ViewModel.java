@@ -1,7 +1,7 @@
 package com.example.kopfrechnen.viewmodel;
 
 import com.example.kopfrechnen.model.Task;
-import com.example.kopfrechnen.model.TaskSet;
+import com.example.kopfrechnen.model.TaskQueue;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
@@ -16,7 +16,7 @@ import javafx.beans.property.StringProperty;
  */
 
 public class ViewModel {
-  private final TaskSet taskSet;
+  private final TaskQueue taskQueue;
   private final ObjectProperty<Task> currentTask = new SimpleObjectProperty<>();
   private final StringProperty currentTaskString = new SimpleStringProperty();
   private final IntegerProperty correctAnswers = new SimpleIntegerProperty();
@@ -27,9 +27,9 @@ public class ViewModel {
   /**
    * Constructor that sets everything to a starting point.
    */
-  public ViewModel(TaskSet taskSet) {
-    this.taskSet = taskSet;
-    currentTask.set(taskSet.getnextTask());
+  public ViewModel(TaskQueue taskQueue) {
+    this.taskQueue = taskQueue;
+    currentTask.set(taskQueue.getNextTask());
     currentTaskString.set(currentTask.get().showTask());
     colorProperty.set("-fx-background-color: white");
     userInput.set("");
@@ -69,7 +69,7 @@ public class ViewModel {
     } else {
       colorProperty.set("-fx-background-color: red");
     }
-    Task nextTask = taskSet.getnextTask();
+    Task nextTask = taskQueue.getNextTask();
     if (nextTask != null) {
       currentTask.set(nextTask);
       currentTaskString.set(nextTask.showTask());

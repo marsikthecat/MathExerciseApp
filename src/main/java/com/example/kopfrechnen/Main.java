@@ -1,10 +1,10 @@
 package com.example.kopfrechnen;
 
-import java.util.Optional;
 import com.example.kopfrechnen.model.Configuration;
-import com.example.kopfrechnen.model.TaskSet;
+import com.example.kopfrechnen.model.TaskQueue;
 import com.example.kopfrechnen.uiutils.StartWindow;
 import com.example.kopfrechnen.viewmodel.ViewModel;
+import java.util.Optional;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -18,28 +18,31 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 /**
- * Main 109 lines.
- * ViewModel 81 lines.
- * TaskSet 30 lines.
  * Configuration 13 lines.
- * StartWindow 69 lines.
- * 302 lines + 79 lines CSS.
+ * Task 67 lines.
+ * TaskQueue 48 lines.
+ * StartWindow 74 lines.
+ * ViewModel 81 lines.
+ * Main 116 lines.
+ * Total 399 lines + 79 lines css = 478 lines.
  */
 
 public class Main extends Application {
 
   private ViewModel viewModel;
   private Configuration configuration;
-  private TaskSet taskSet;
+  private TaskQueue taskQueue;
 
   @Override
   public void start(Stage stage) {
     StartWindow startWindow = new StartWindow();
     configuration = startWindow.getConfig();
-    taskSet = new TaskSet(configuration);
-    viewModel = new ViewModel(taskSet);
+    taskQueue = new TaskQueue(configuration);
+    viewModel = new ViewModel(taskQueue);
 
     VBox content = new VBox();
+    content.setAlignment(Pos.CENTER);
+    content.styleProperty().bind(viewModel.getColorProperty());
     Label taskLabel = new Label();
     taskLabel.textProperty().bind(viewModel.getCurrentTaskString());
     taskLabel.setFont(new Font("Arial", 25));
@@ -49,8 +52,6 @@ public class Main extends Application {
     field.textProperty().bindBidirectional(viewModel.getUserInputProperty());
 
     content.getChildren().addAll(taskLabel, field);
-    content.setAlignment(Pos.CENTER);
-    content.styleProperty().bind(viewModel.getColorProperty());
 
     long startTime = System.currentTimeMillis();
     setUpGame(field, startTime);
@@ -61,6 +62,9 @@ public class Main extends Application {
     stage.show();
   }
 
+  /**
+   * Sets up the game by binding the TextField to the ViewModel and handling key events.
+   */
   public void setUpGame(TextField field, long startTime) {
     field.setOnKeyPressed(e -> {
       if (e.getCode() == KeyCode.ENTER) {
@@ -79,8 +83,8 @@ public class Main extends Application {
       System.exit(0);
     }
     field.setDisable(false);
-    this.taskSet = new TaskSet(configuration);
-    this.viewModel = new ViewModel(taskSet);
+    taskQueue.setConfigurationAndRestart(configuration);
+    viewModel = new ViewModel(taskQueue);
   }
 
   private void endGame(TextField field, int right, long st) {
@@ -103,6 +107,9 @@ public class Main extends Application {
     }
   }
 
+  /**
+   * .
+   */
   public static void main(String[] args) {
     launch();
   }

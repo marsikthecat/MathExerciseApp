@@ -58,8 +58,13 @@ public class StartWindow extends Stage {
 
   private void startMain(ComboBox<String> operator, Spinner<Integer> limit, 
       Spinner<Integer> numberOfTask) {
-    this.config = new Configuration(
-      operator.getValue(), limit.getValue(), numberOfTask.getValue());
+    if (operator.getValue() == null || limit.getValue() == null
+        || numberOfTask.getValue() == null || operator.getValue().isEmpty()) {
+      config = new Configuration("+", 5, 5);
+    } else {
+      config = new Configuration(
+              operator.getValue(), limit.getValue(), numberOfTask.getValue());
+    }
     this.close();
   }
 
