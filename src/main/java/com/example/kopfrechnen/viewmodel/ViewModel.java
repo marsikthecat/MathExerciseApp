@@ -58,16 +58,19 @@ public class ViewModel {
   }
 
   /**
-   * processed the Answer send by the user and sets up the next task if it exists.
+   * processes the Answer by the user and pulls the next task if it exists.
    */
-
   public void checkAnswer() {
-    int userAnswer = Integer.parseInt(userInput.get());
-    if (userAnswer == currentTask.get().getAnswer()) {
-      correctAnswers.set(correctAnswers.get() + 1);
-      colorProperty.set("-fx-background-color: green");
-    } else {
+    if (!validate()) {
       colorProperty.set("-fx-background-color: red");
+    } else {
+      int userAnswer = Integer.parseInt(userInput.get());
+      if (userAnswer == currentTask.get().getAnswer()) {
+        correctAnswers.set(correctAnswers.get() + 1);
+        colorProperty.set("-fx-background-color: green");
+      } else {
+        colorProperty.set("-fx-background-color: red");
+      }
     }
     Task nextTask = taskQueue.getNextTask();
     if (nextTask != null) {
@@ -76,6 +79,19 @@ public class ViewModel {
       userInput.set("");
     } else {
       gameFinished.set(true);
+    }
+  }
+
+  private boolean validate() {
+    String input = userInput.get();
+    if (input.isEmpty() || input.isBlank()) {
+      return false;
+    }
+    try {
+      Integer.parseInt(userInput.get());
+      return true;
+    } catch (NumberFormatException e) {
+      return false;
     }
   }
 }

@@ -27,18 +27,11 @@ public class Task {
   private int calculateAnswer() {
     Random random = new Random();
     if (Objects.equals(operator, "/")) {
-      int resultForDivision;
-      while (true) {
-        int n1 = random.nextInt(limit);
-        int n2 = random.nextInt(limit);
-        if (n2 != 0 && n1 % n2 == 0) {
-          resultForDivision = n1 / n2;
-          this.n1 = n1;
-          this.n2 = n2;
-          break;
-        }
-      }
-      return resultForDivision;
+      int divisor = random.nextInt(limit) + 1;
+      int result = random.nextInt(limit);
+      this.n1 = divisor * result;
+      this.n2 = divisor;
+      return result;
     }
     int n1 = random.nextInt(limit);
     int n2 = random.nextInt(limit);

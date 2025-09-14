@@ -8,7 +8,7 @@ import java.util.ArrayDeque;
 
 public class TaskQueue extends ArrayDeque<Task> {
 
-  private Configuration configuration;
+  private final Configuration configuration;
 
   /**
    * Constructor that initializes the task queue with a given configuration.
@@ -32,17 +32,5 @@ public class TaskQueue extends ArrayDeque<Task> {
 
   public Task getNextTask() {
     return isEmpty() ? null : pollFirst();
-  }
-
-  /**
-   * Clears the task queue.
-   */
-  public void setConfigurationAndRestart(Configuration configuration) {
-    if (configuration == null) {
-      throw new NullPointerException("configuration cannot be null reference");
-    }
-    this.configuration = configuration;
-    clear();
-    fillTasks();
   }
 }
