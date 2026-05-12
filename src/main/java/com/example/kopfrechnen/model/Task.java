@@ -4,7 +4,7 @@ import java.util.Objects;
 import java.util.Random;
 
 /**
- * Task Objekt which consists of random numbers n1 and n2 with an operator between them.
+ * Task Object which consists of random numbers n1 and n2 with an operator between them.
  */
 
 public class Task {

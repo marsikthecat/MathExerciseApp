@@ -32,8 +32,8 @@ import javafx.stage.Stage;
  * TaskQueue: 36 lines.
  * LabeledSpinner: 30 lines.
  * ViewModel: 97 lines.
- * Main: 146 lines.
- * Total 375 lines + 79 lines css = 454 lines.
+ * Main: 138 lines.
+ * Total 367 lines + 79 lines CSS.
  */
 
 public class Main extends Application {
@@ -52,12 +52,12 @@ public class Main extends Application {
     LabeledSpinner limit = new LabeledSpinner("Limit: ", new Spinner<>(1, 100, 1));
     LabeledSpinner numTask = new LabeledSpinner("Number of tasks: ", new Spinner<>(1, 30, 1));
     Button startBtn = new Button("Start");
-    startBtn.setOnAction(e -> {
+    startBtn.setOnAction(_ -> {
       configuration = new Configuration(operator.getValue(), limit.getValue(), numTask.getValue());
       startGame();
     });
     Button stopBtn = new Button("Stop");
-    stopBtn.setOnAction(e -> System.exit(0));
+    stopBtn.setOnAction(_ -> System.exit(0));
     HBox buttonBox = new HBox();
     buttonBox.setAlignment(Pos.CENTER);
     buttonBox.setPadding(new Insets(20, 0, 0, 0));
@@ -106,7 +106,6 @@ public class Main extends Application {
     long startTime = System.currentTimeMillis();
     field.setOnKeyPressed(e -> {
       if (e.getCode() == KeyCode.ENTER) {
-        System.out.println("key");
         viewModel.checkAnswer();
         if (viewModel.getGameFinishedProperty().get()) {
           endGame(field, viewModel.getCorrectAnswersProperty().get(), startTime);
@@ -135,12 +134,5 @@ public class Main extends Application {
     } else {
       System.exit(0);
     }
-  }
-
-  /**
-   * .
-   */
-  public static void main(String[] args) {
-    launch();
   }
 }

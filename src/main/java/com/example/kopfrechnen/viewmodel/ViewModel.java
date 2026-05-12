@@ -58,7 +58,7 @@ public class ViewModel {
   }
 
   /**
-   * processes the Answer by the user and pulls the next task if it exists.
+   * Processes the Answer by the user and pulls the next task if it exists.
    */
   public void checkAnswer() {
     if (!validate()) {
@@ -84,7 +84,7 @@ public class ViewModel {
 
   private boolean validate() {
     String input = userInput.get();
-    if (input.isEmpty() || input.isBlank()) {
+    if (input.isBlank()) {
       return false;
     }
     try {
